@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import Link from 'next/link';
+import SpeakerCard from '../src/SpeakerCard';
 
 class Speakers extends React.Component {
 
@@ -40,17 +40,16 @@ class Speakers extends React.Component {
 
     render() {
         return (
-            <div>
-                <Link href='/sessions'>
-                    <a>SESSIONS</a>
-                </Link>
-                <ul>
-                    {this.state.speakerData.map((speaker) =>
-                        <li key={speaker.id}>
-                            {speaker.firstName} {speaker.lastName}
-                        </li>
-                    )}
-                </ul>
+            <div className="container">
+                <div className="row">
+                    <div className="card-deck">
+                        {this.state.speakerData.map((speaker) =>
+                            <div className="card col-4 cardmin margintopbottom20" key={speaker.id}>
+                                <SpeakerCard speaker={speaker}/>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
         )
     }
