@@ -2,6 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import SpeakerCard from '../src/SpeakerCard';
 
+import getConfig from 'next/config';
+const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
+
 class Speakers extends React.Component {
 
     static GetSpeakersUrl() {
