@@ -22,3 +22,6 @@ CMD ["npm", "start"]
 # Tag created image: (imageid can be retrieved using docker images)
 # > docker tag <imageid> <useraccount>/svccps1:latest
 # > docker push <useraccount>/svccps1:latest
+
+# Run:
+# > docker run -p 80:3000 svccps1
