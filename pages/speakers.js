@@ -4,9 +4,17 @@ import SpeakerCard from '../src/SpeakerCard';
 
 class Speakers extends React.Component {
 
+    static GetSpeakersUrl() {
+        if (process.env.NODE_ENV === "production") {
+            return process.env.RESTURL_SPEAKERS_PROD
+                || publicRuntimeConfig.RESTURL_SPEAKERS_PROD;
+        } else {
+            return process.env.RESTURL_SPEAKERS_DEV;
+        }
+    }
 
     static async getInitialProps() {
-        var promise = axios.get('http://localhost:4000/speakers')
+        var promise = axios.get(Speakers.GetSpeakersUrl())
             .then(response => {
                 return {
                     hasErrored: false,
