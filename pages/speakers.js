@@ -16,21 +16,35 @@ class Speakers extends React.Component {
         }
     }
 
-    static async getInitialProps() {
-        var promise = axios.get(Speakers.GetSpeakersUrl())
-            .then(response => {
+    static async getInitialProps(req) {
+        const isServer = !!req;
+        if (isServer) {
+            var promise = axios.get(Speakers.GetSpeakersUrl()).then(response => {
                 return {
+                    isLoading: false,
                     hasErrored: false,
                     speakerData: response.data
                 };
             })
-            .catch(error => {
-                return {
-                    hasErrored: true,
-                    message: error.message
-                }
-            });
-        return promise;
+                .catch(error => {
+                    return {
+                        hasErrored: true,
+                        message: error.message
+                    }
+                });
+            return promise;
+        } else {
+
+            return {
+                speakerData: [...Array(5)].map((_, i) => ({
+                    firstName: "",
+                    lastName: "",
+                    id: i
+                })),
+                isLoading: true
+            };
+
+        }
     }
 
     constructor(props) {
@@ -40,6 +54,26 @@ class Speakers extends React.Component {
             message: props.message,
             speakerData: props.speakerData
         }
+    }
+
+    // this doesn't get run on the server:
+    componentDidMount() {
+        axios
+            .get(Speakers.GetSpeakersUrl())
+            .then((response) => {
+                this.setState({
+                    hasErrored: false,
+                    isLoading: false,
+                    speakerData: response.data
+                });
+            })
+            .catch((error) => {
+                this.setState({
+                    hasErrored: true,
+                    isLoading: false,
+                    speakerData: []
+                });
+            });
     }
 
     componentDidMount() {
@@ -56,7 +90,8 @@ class Speakers extends React.Component {
                     <div className="card-deck">
                         {this.state.speakerData.map((speaker) =>
                             <div className="card col-4 cardmin margintopbottom20" key={speaker.id}>
-                                <SpeakerCard speaker={speaker}/>
+                                <SpeakerCard isLoading={this.state.isLoading}
+                                    speaker={speaker}/>
                             </div>
                         )}
                     </div>
